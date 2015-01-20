@@ -8,10 +8,7 @@ defmodule ParserTest do
   end
 
   test "parsing disallow all for all bots" do
-    file = """
-    User-agent: *
-    Disallow: /
-    """
+    file = "User-agent: *\nDisallow: /"
 
     result = Kryten.Parser.parse file
     assert result == [{"*", ["/"]}]

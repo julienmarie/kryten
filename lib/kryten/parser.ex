@@ -20,6 +20,6 @@ defmodule Kryten.Parser do
   end
 
   defp update_agent(["User-agent", agent], _current), do: { String.strip(agent), [] }
-  defp update_agent(["Disallow", path], { current, paths }), do: { current, [String.split(path)|paths] }
+  defp update_agent(["Disallow", path], { current, paths }), do: { current, [String.strip(path)|paths] }
 
 end
