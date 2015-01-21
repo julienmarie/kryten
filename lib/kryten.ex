@@ -33,9 +33,12 @@ defmodule Kryten do
     |> paths_for_bot(paths)
     |> Enum.map(fn p -> path_exists?(p, uri.path) end)
     |> Enum.reduce(fn v, acc -> acc && v end)
+    |> inverse
   end
 
-  defp path_exists?(paths, path), do: Enum.find(paths, false, fn p -> p != path end)
+  defp inverse(value), do: !value
+
+  defp path_exists?(paths, path), do: Enum.find_value(paths, false, fn p -> p == path || (String.ends_with?(p, "/") && String.starts_with?(path, p)) end)
 
   defp paths_for_bot(botname, paths), do: _paths_for_bot(botname, paths, [])
 
