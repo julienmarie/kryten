@@ -16,12 +16,27 @@ defmodule Kryten do
     Supervisor.start_link(children, opts)
   end
 
+  def add_host(uri) do
+    uri
+    |> URI.parse
+    |> build_robots_path
+    |> get_robots
+    |> add_to_server
+  end
+
   def allow?(botname, uri) do
     {botname, uri}
     |> parse_uri
     |> get_paths
     |> path_allowed?
   end
+
+  defp build_robots_path(uri), do: { uri.scheme <> "://" <> uri.host <> "/robots.txt", uri }
+
+  defp get_robots({ get_from, uri }), do: { HTTPoison.get(get_from), uri }
+
+  defp add_to_server({ { :ok, %HTTPoison.Response{ status_code: 200, body: body } }, uri }), do: Kryten.Server.accept(uri.host, body)
+  defp add_to_server(result), do: IO.puts result
 
   defp parse_uri({ botname, uri }), do: { botname, URI.parse(uri) }
 
