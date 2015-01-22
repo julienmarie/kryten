@@ -56,7 +56,7 @@ defmodule KrytenTest do
     false = Kryten.allow? "BadBot", "http://localhost.com/secret/password.html"
   end
 
-  test "not allowed subpath all rule" do
+  test "not allowed subpath specific rule" do
     Kryten.Server.clear
     Kryten.Server.accept("localhost.com", "User-agent: BadBot\nDisallow: /secret/")
 
